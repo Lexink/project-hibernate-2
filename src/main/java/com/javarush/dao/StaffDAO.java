@@ -1,6 +1,5 @@
 package com.javarush.dao;
 
-import com.javarush.domain.Rental;
 import com.javarush.domain.Staff;
 import com.javarush.domain.Store;
 import org.hibernate.SessionFactory;

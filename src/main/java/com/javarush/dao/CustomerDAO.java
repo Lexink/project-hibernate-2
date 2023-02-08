@@ -1,6 +1,5 @@
 package com.javarush.dao;
 
-import com.javarush.domain.City;
 import com.javarush.domain.Customer;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -16,9 +15,8 @@ public class CustomerDAO extends AbstractDAO<Customer> {
     }
 
     public Customer getRandomCustomer(){
-        Query query = getCurrentSession().createQuery("select COUNT(*) from Customer c");
-        Long count = (Long) query.getSingleResult();
-        System.out.println("Count = " + count);
+        Query<Long> query = getCurrentSession().createQuery("select COUNT(*) from Customer c");
+        Long count = query.getSingleResult();
         int randomId = (int)(Math.random()*count.intValue() + 1);
         return getById(randomId);
     }
