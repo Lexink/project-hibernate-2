@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class FilmText {
     @Id
     @Column(name = "film_id")
-    private Integer id;
+    private Short id;
 
     @OneToOne
     @JoinColumn(name = "film_id")

@@ -15,7 +15,7 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "address_id")
-    private Integer id;
+    private Short id;
 
     @Column(name = "address")
     private String address;
@@ -35,9 +35,6 @@ public class Address {
 
     @Column(name = "phone")
     private String phone;
-
-    //TODO location
-
 
     @Column(name = "last_update")
     @UpdateTimestamp

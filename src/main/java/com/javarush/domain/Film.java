@@ -1,5 +1,7 @@
 package com.javarush.domain;
 
+import com.javarush.utils.RatingConverter;
+import com.javarush.utils.YearConverter;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
@@ -9,7 +11,9 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Year;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -19,7 +23,7 @@ public class Film {
     @Id
     @Column(name = "film_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Short id;
 
     @Column(name = "title")
     private String title;
@@ -29,6 +33,7 @@ public class Film {
     private String description;
 
     @Column(name = "release_year", columnDefinition = "year")
+    @Convert(converter = YearConverter.class)
     private Year releaseYear;
 
     @ManyToOne
@@ -52,6 +57,7 @@ public class Film {
     private BigDecimal replacementCost;
 
     @Column(name = "rating", columnDefinition = "enum('G', 'PG', 'PG-13', 'R', 'NC-17')")
+    @Convert(converter = RatingConverter.class)
     private Rating rating;
 
     @Column(name = "special_features", columnDefinition = "set('Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes')")
@@ -77,5 +83,24 @@ public class Film {
     )
     private Set<Category> categories;
 
+    public Set<SpecialFeature> getSpecialFeatures() {
+        if (specialFeatures == null || specialFeatures.isEmpty()){
+            return null;
+        }
+        Set<SpecialFeature> features = new HashSet<>();
+        String[] splittedFeatures = specialFeatures.split(",");
+        for (String splittedFeature : splittedFeatures) {
+            features.add(SpecialFeature.getFeatureByValue(splittedFeature));
+        }
+        features.remove(null);
+        return features;
+    }
 
+    public void setSpecialFeatures(Set<SpecialFeature> features) {
+        if (features == null){
+            this.specialFeatures = null;
+        } else {
+            this.specialFeatures = features.stream().map(SpecialFeature::getValue).collect(Collectors.joining(","));
+        }
+    }
 }
